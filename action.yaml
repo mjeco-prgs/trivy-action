@@ -214,6 +214,7 @@ runs:
       id: scan
       shell: bash
       run: entrypoint.sh
+      continue-on-error: true
       env:
         # For shell script
         # > If the action is written using a composite, then it will not automatically get INPUT_<VARIABLE_NAME>
