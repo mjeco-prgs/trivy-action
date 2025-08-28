@@ -211,6 +211,7 @@ runs:
         set_env_var_if_provided "TRIVY_DOCKER_HOST" "${{ inputs.docker-host }}" ""
 
     - name: Run Trivy
+      id: scan
       shell: bash
       run: entrypoint.sh
       env:
@@ -234,3 +235,7 @@ runs:
       shell: bash
       run: |
         rm -f trivy_envs.txt
+
+        if [[ ${{ steps.scan.outcome }} == "failure" ]] && [[ -n "${{ inputs.exit-code }}" ]]; then
+          exit ${{ inputs.exit-code }}
+        fi
