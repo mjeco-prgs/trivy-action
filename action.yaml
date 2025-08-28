@@ -227,19 +227,3 @@ runs:
 
         # For Trivy
         TRIVY_CACHE_DIR: ${{ inputs.cache-dir }} # Always set
-
-    # Remove Trivy envs to keep envs within this action and avoid env leaks
-    # See #422 for context
-    - name: Remove Trivy Envs file
-      if: ${{ always() }}
-      shell: bash
-      run: |
-        rm -f trivy_envs.txt
-
-    # Exit with a custom exit code if vulnerabilities are found and 'exit-code' input is set.
-    - name: Exit
-      if: ${{ always() && steps.scan.outcome == 'failure' && inputs.exit-code != '' }}
-      shell: bash
-      run: |
-        echo "Scan detected vulnerabilities"
-        exit ${{ inputs.exit-code }}
