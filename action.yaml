@@ -227,3 +227,16 @@ runs:
 
         # For Trivy
         TRIVY_CACHE_DIR: ${{ inputs.cache-dir }} # Always set
+
+    # Remove Trivy envs to keep envs within this action and avoid env leaks
+    # See #422 for context
+    - name: Remove Trivy Envs file
+      if: ${{ always() }}
+      shell: bash
+      run: |
+        rm -f trivy_envs.txt
+
+    - name: Fail if scan failed
+      if: ${{ steps.scan.outcome == 'failure' }}
+      shell: bash
+      run: exit 1
