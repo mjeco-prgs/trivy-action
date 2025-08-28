@@ -237,7 +237,7 @@ runs:
         rm -f trivy_envs.txt
 
     - name: Exit
-      if: ${{ steps.scan.outcome }} == "failure" && ${{ inputs.exit-code }}
+      if: always() && steps.scan.outcome == "failure" && inputs.exit-code
       shell: bash
       run: |
         echo "Scan detected vulnerabilities"
